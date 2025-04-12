@@ -19,6 +19,22 @@
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Tweetear</button>
         </form>
 
+        <!-- Usuarios sugeridos -->
+        <div class="my-6">
+            <h3 class="text-lg font-semibold mb-2">Usuarios sugeridos para seguir</h3>
+            @foreach($suggestedUsers as $suggested)
+            <div class="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
+                <a href="{{ route('profile', $suggested) }}" class="text-blue-600 hover:underline">
+                    {{ $suggested->username }}
+                </a>
+                <form method="POST" action="{{ route('follow', $suggested) }}">
+                    @csrf
+                    <button class="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Seguir</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
         <h3 class="text-lg font-semibold mb-4">Tweets recientes</h3>
         @foreach($tweets as $tweet)
         <div class="p-4 bg-white rounded shadow mb-4">

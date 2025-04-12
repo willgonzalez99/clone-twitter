@@ -68,4 +68,13 @@ class User extends Authenticatable
         return $this->follows->contains($user);
     }
 
+    public function suggestedUsers()
+    {
+        return User::where('id', '!=', $this->id)
+            ->whereNotIn('id', $this->follows()->pluck('followed_id'))
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+    }
+
 }

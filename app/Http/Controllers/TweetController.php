@@ -11,7 +11,8 @@ class TweetController extends Controller
     {
         $tweets = Tweet::whereIn('user_id', Auth::user()->follows()->pluck('followed_id')->push(Auth::id()))
             ->latest()->get();
-        return view('dashboard', compact('tweets'));
+        $suggestedUsers = Auth::user()->suggestedUsers();
+        return view('dashboard', compact('tweets', 'suggestedUsers'));
     }
 
     public function store(Request $request)
