@@ -6,10 +6,10 @@
         @csrf
 
         <!-- Email Address -->
+        <!-- Username input -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <label for="username">Nombre de usuario</label>
+            <input id="username" type="text" name="username" required autofocus />
         </div>
 
         <!-- Password -->
