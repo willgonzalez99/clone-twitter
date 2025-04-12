@@ -1,35 +1,28 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-bold text-gray-800">Perfil de {{ $user->username }}</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Perfil de {{ $user->username }}
+        </h2>
     </x-slot>
 
-    <div class="max-w-4xl mx-auto py-6 space-y-4">
-        <div class="bg-white p-4 shadow rounded">
-            <p><strong>Nombre completo:</strong> {{ $user->name }}</p>
-            <p><strong>Email:</strong> {{ $user->email }}</p>
-            <p><strong>Seguidores:</strong> {{ $user->followers()->count() }}</p>
-            <p><strong>Siguiendo:</strong> {{ $user->follows()->count() }}</p>
+    <div class="py-4 max-w-4xl mx-auto">
+        @if(Auth::id() !== $user->id)
+        @if(Auth::user()->isFollowing($user))
+        <p class="mb-4 text-green-600">Ya estás siguiendo a {{ $user->username }}</p>
+        @else
+        <form method="POST" action="{{ route('follow', $user) }}">
+            @csrf
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Seguir</button>
+        </form>
+        @endif
+        @endif
 
-            <form method="POST" action="{{ route('follow', $user->id) }}" class="mt-2">
-                @csrf
-                <button class="bg-blue-500 text-white px-4 py-2 rounded">Seguir</button>
-            </form>
+        <h3 class="text-lg font-semibold mt-6 mb-4">Tweets de {{ $user->username }}</h3>
+        @foreach($user->tweets as $tweet)
+        <div class="p-4 bg-white rounded shadow mb-4">
+            <p class="text-gray-800">{{ $tweet->content }}</p>
+            <p class="text-sm text-gray-500">{{ $tweet->created_at->diffForHumans() }}</p>
         </div>
-
-        <div class="bg-white p-4 shadow rounded">
-            <h3 class="font-bold mb-2">Tweets</h3>
-            @foreach($user->tweets as $tweet)
-            <div class="mb-2">
-                <p>{{ $tweet->content }}</p>
-                <p class="text-sm text-gray-500">{{ $tweet->created_at->diffForHumans() }}</p>
-            </div>
-            @endforeach
-        </div>
-
-        <div class="flex space-x-4">
-            <a href="{{ route('followers', $user->id) }}" class="text-blue-600">Ver seguidores</a>
-            <a href="{{ route('followed', $user->id) }}" class="text-blue-600">Ver seguidos</a>
-            <a href="{{ route('dashboard') }}" class="text-blue-600">Volver al inicio</a>
-        </div>
+        @endforeach
     </div>
 </x-app-layout>
